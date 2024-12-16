@@ -34,13 +34,9 @@ pub fn main() !void {
     }
     sort(i32, &list_a, {}, comptime asc(i32));
     sort(i32, &list_b, {}, comptime asc(i32));
-    var total_dist: i32 = 0;
+    var total_dist: u32 = 0;
     for (list_a, list_b) |a, b| {
-        if (a > b) {
-            total_dist += a - b;
-        } else {
-            total_dist += b - a;
-        }
+        total_dist += @abs(a - b);
     }
     print("total_dist: {d}\n", .{total_dist});
 }
