@@ -31,4 +31,18 @@ pub fn main() !void {
         total_dist += @abs(a - b);
     }
     print("total_dist: {d}\n", .{total_dist});
+    var similarity_score: i32 = 0;
+    for (list_a) |a| {
+        var num_a_in_b: i32 = 0;
+        for (list_b) |b| {
+            if (a == b) {
+                num_a_in_b += 1;
+            }
+            else if (a < b) {
+                break;  // since the lists are sorted, we can break early
+            }
+        }
+        similarity_score += a * num_a_in_b;
+    }
+    print("similarity_score: {d}\n", .{similarity_score});
 }
