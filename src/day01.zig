@@ -10,37 +10,37 @@ const gpa = util.gpa;
 
 const data = @embedFile("data/day01.txt");
 
-pub fn main() !void {
-    
-}
-
-// Useful stdlib functions
-const tokenizeAny = std.mem.tokenizeAny;
-const tokenizeSeq = std.mem.tokenizeSequence;
-const tokenizeSca = std.mem.tokenizeScalar;
-const splitAny = std.mem.splitAny;
-const splitSeq = std.mem.splitSequence;
-const splitSca = std.mem.splitScalar;
-const indexOf = std.mem.indexOfScalar;
-const indexOfAny = std.mem.indexOfAny;
-const indexOfStr = std.mem.indexOfPosLinear;
-const lastIndexOf = std.mem.lastIndexOfScalar;
-const lastIndexOfAny = std.mem.lastIndexOfAny;
-const lastIndexOfStr = std.mem.lastIndexOfLinear;
-const trim = std.mem.trim;
-const sliceMin = std.mem.min;
-const sliceMax = std.mem.max;
+const print = std.debug.print;
 
 const parseInt = std.fmt.parseInt;
-const parseFloat = std.fmt.parseFloat;
 
-const print = std.debug.print;
-const assert = std.debug.assert;
-
-const sort = std.sort.block;
 const asc = std.sort.asc;
-const desc = std.sort.desc;
 
-// Generated from template/template.zig.
-// Run `zig build generate` to update.
-// Only unmodified days will be updated.
+const sort = std.mem.sort;
+const tokenizeAny = std.mem.tokenizeAny;
+
+pub fn main() !void {
+    @setEvalBranchQuota(1_000_000);
+    const nlines = comptime std.mem.count(u8, data, "\n") ;
+    var list_a: [nlines]i32 = undefined;
+    var list_b: [nlines]i32 = undefined;
+    var flines = tokenizeAny(u8, data, "\n");
+    var i: u32 = 0;
+    while (flines.next()) |line| {
+        var lparts = tokenizeAny(u8, line, " ");
+        list_a[i] = try parseInt(i32, lparts.next().?, 10);
+        list_b[i] = try parseInt(i32, lparts.next().?, 10);
+        i += 1;
+    }
+    sort(i32, &list_a, {}, comptime asc(i32));
+    sort(i32, &list_b, {}, comptime asc(i32));
+    var total_dist: i32 = 0;
+    for (list_a, list_b) |a, b| {
+        if (a > b) {
+            total_dist += a - b;
+        } else {
+            total_dist += b - a;
+        }
+    }
+    print("total_dist: {d}\n", .{total_dist});
+}
